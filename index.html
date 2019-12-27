@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Graph Games</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Abril+Fatface|Roboto:300,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:900|Work+Sans:300" rel="stylesheet">
+</head>
+<body>
+    <div id="main">
+        <!-- <h1>If you wanted a header it could go here</h1> -->
+        <div id="canvas-area">
+            <div id="top-text">
+                <h1>Learn with Graphs</h1>
+                <p>Add some nodes, add some edges! Simply click a node to connect it to any other.</p>
+            </div>
+            <input type="button" value="ADD NODE" id="add-node">
+            <canvas id="my-canvas">
+            </canvas>
+        </div>
+        <div id="side-bar">
+            <h1>Properties</h1>
+            <p>Click on any of the following properties for more information about your graph.</p>
+            <ul id="info">
+               <li class="list-item" id="numnodes">Nodes<span class="answer"></span></li>
+               <li class="list-item" id="numedges">Edges<span class="answer"></span></li>
+               <li class="list-item" id="complete">Completeness<span class="answer"></span></li>
+               <li class="list-item" id="euler">Eulerian Path<span class="answer"></span></li>
+               <li class="list-item" id="cycle">Hamiltonian Cycle<span class="answer"></span></li>
+               <li class="list-item" id="components">Connected Components<span class="answer"></span></li>
+            </ul>
+            <!--for testing purposes <div id="output"></div>  -->
+        </div>
+    </div>
+    <script src="graph.js"></script>
+</body>
+</html>
