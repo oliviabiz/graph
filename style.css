@@ -110,7 +110,8 @@ html{
 
 #info{
     height: 0px;
-    padding: 0vh;
+    padding: 0px;
+    padding-left: 2px;
     transition: height 0.5s linear;
     overflow-y: hidden;
 }

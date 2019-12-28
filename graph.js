@@ -37,7 +37,7 @@ document.querySelectorAll('.list-item').forEach(b =>
         b.addEventListener('click', 
         e => {
             info.textContent = e.currentTarget.children[1].innerText;
-            info.style.height = info.scrollHeight + "px";
+            info.style.height = (info.scrollHeight) + "px";
             info.style.background = fontFam[1];     
         });
     });
@@ -327,19 +327,19 @@ function addInfo(property){
     let spanner = property.children[1];
     switch(property.innerText){
         case "Nodes":
-            spanner.innerText = "Nodes, also referred to as vertices, think of these as the units in your graph.";
+            spanner.innerText = "Nodes, also referred to as vertices, are the main units in a graph.";
             break;
         case "Edges":
-            spanner.innerText = "Edges connect two nodes in a graph. These can be ordered, such that the edge goes from some node 1 to node 2, or unordered (like in this graph), where the order does not matter. Two nodes connected by an edge are said to be adjacent, or neighbours.";
+            spanner.innerText = "Edges connect two nodes in a graph. These can be ordered, such that the edge goes strictly from some node 1 to node 2, or unordered (like in this graph), where the order does not matter. Two nodes connected by an edge are said to be adjacent, or neighbours.";
             break;
         case "Completeness":
-            spanner.innerText = "In a complete graph, every node is connected (ie. shares an edge with) every other node in the graph. Fun fact: if a graph with N edges is complete, it will have N*(N-1)/2 edges!";
+            spanner.innerText = "In a complete graph, every node is connected (shares an edge with) every other node in the graph. Fun fact: if a graph with N edges is complete, it will have N*(N-1)/2 edges!";
             break;
         case "Eulerian Path":
-            spanner.innerText = "A Eularian path in a graph is once that traverses every edge exactly once. You can think of this as whether it would be possible to draw the graph on paper without lifting your pencil.";
+            spanner.innerText = "A Eulerian path in a graph is once that traverses every edge exactly once. You can think of this as whether or not it would be possible to draw the graph on paper without lifting your pencil.";
             break;
         case "Connected Components":
-            spanner.innerText = "A Connected Component is a subgraph of a graph in which each node is \"reachable\". This means there is a path to each node within the subgraph. That being said, a single node with no adjacent nodes is a component itself.";
+            spanner.innerText = "A connected component is a subgraph of a graph in which each node is \"reachable\". This means there is a path to each node within the subgraph. That being said, a single node with no adjacent nodes is a component itself.";
             break;
         default:
             console.log('Problem: ' + property.innerText);
