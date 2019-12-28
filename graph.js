@@ -184,14 +184,14 @@ function edgeAdder(e){
         n.draw();
         setTimeout(function(){
             if(nodes.length<=1 || n.neighbours.length===nodes.length-1){
-                alert('Not enough available nodes.');
+                alert('No available nodes.');
                 colorClear();
                 selected = undefined;
                 return;
             }
             
-            if(confirm("would you like to draw an edge?")){
-                alert('select a neighbour');
+            if(confirm("Would you like to add an edge to this node?")){
+                alert('Select a neighbour');
                 nodes.filter(node => (n!==node) && (!n.neighbours.includes(node))).forEach(node => {
                     c.fillStyle = nodeColorTemp;
                     node.draw();
