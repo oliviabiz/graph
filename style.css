@@ -4,7 +4,7 @@ body{
 
 #main{
     height:100vh;
-    padding-top:50vh;
+    padding-top:3vh;
 }
 
 #main div{
@@ -29,11 +29,12 @@ body{
 }
 
 #side-bar{
-    width: 35vw;
+    width: 26vw;
     float:right;
     height: 100vh;
-    margin-right: 2vw;
+    margin-right: 4vw;
 }
+
 
 *{
     padding:0;
@@ -86,8 +87,12 @@ ul{
     margin-top:15px;
     list-style:none;
     border: 1px solid grey;
-    border-radius: 5px;
+    border-radius: 0px;
 }
+
+/* #properties{
+    border: 2px solid red;
+} */
 
 li{
     border-bottom: 1px solid grey;
@@ -100,5 +105,12 @@ body{
 }
 
 html{
+    overflow-y: hidden;
+}
+
+#info{
+    height: 0px;
+    padding: 0vh;
+    transition: height 0.5s linear;
     overflow-y: hidden;
 }

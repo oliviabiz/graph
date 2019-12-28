@@ -1,12 +1,4 @@
-/**
- * Still have to fix event listeners grabbing span instead - FIXED
- * implement Edge class
- * Fix eulerian
- * Add properties...
- * Prevent collision
- * Resize when crowded
- */
-const canvas = document.querySelector('#my-canvas'); //parent of nodes
+const canvas = document.querySelector('#my-canvas'); 
 const c = canvas.getContext("2d");
 const fontFam = [
     "#A8F8FF",
@@ -21,50 +13,53 @@ const nodeColorTemp = fontFam[0];
 const nodeColorTarget = fontFam[4];
 const edgeColor = fontFam[3];
 const btn = document.querySelector("#add-node");
-const radius = 30;
+const radius = 30, yes = "✔", no = "✘";
+const info = document.querySelector('#info');
 
-//document.querySelector('html').style.background = fontFam[2];
 btn.style.background = fontFam[5];
-document.querySelectorAll('li,.list-item:not(span)').forEach(b => 
+document.querySelectorAll('.list-item').forEach(b => 
     {
+        addInfo(b);
         b.addEventListener('mouseover',
-        e => {
-        //    e.currentTarget.style.fontWeight = "bold";
+        e => {        
             e.currentTarget.style.background = fontFam[3];
             e.currentTarget.style.color = "white";
-     
+            computeProperty(e);
+            e.currentTarget.children[0].style.display = "inline";   
         });
         b.addEventListener('mouseout', 
         e => {
-            e.currentTarget.style.fontWeight = "normal";
             e.currentTarget.style.background = "white";
             e.currentTarget.style.color = "black";
-            e.currentTarget.children[0].style.display = "none";
+            info.style.height = "0vh";
+            info.textContent = "";
         });
         b.addEventListener('click', 
         e => {
-           // e.currentTarget.style.fontWeight = "bold"
-            computeProperty(e);
-            e.currentTarget.children[0].style.display = "inline";
-        });
-        b.addEventListener('mouseup', 
-        e=> {
-            e.currentTarget.children[0].style.display = "none";
+            info.textContent = e.currentTarget.children[1].innerText;
+            info.style.height = info.scrollHeight + "px";
+            info.style.background = fontFam[1];     
         });
     });
+
+document.querySelector('#canvas-area').addEventListener('mouseout', e => {
+    if(e.target === e.currentTarget){
+        document.querySelectorAll('.list-item:not(span)').forEach(b => {
+            b.children[0].style.display = "none";
+        });
+    }
+});
 
 var nodes = [];
 var edges = [];
 var selected;
 
-canvas.width = window.innerWidth*0.55; //canvas.parentElement.innerWidth;
-canvas.height = window.innerHeight* 0.7; //canvas.parentElement.innerHeight;
-// const realWidth = 500/770;
-// const realHeight = 300/485;
+canvas.width = window.innerWidth*0.55;
+canvas.height = window.innerHeight* 0.7; 
 
 btn.addEventListener('click', addNode);
-canvas.addEventListener('click', nodeAdder);
-canvas.addEventListener('dblclick', edgeRemover);
+canvas.addEventListener('click', edgeAdder);
+//TODO: canvas.addEventListener('dblclick', edgeRemover);
 
 function addNode(){
     let x = (Math.random() * (canvas.width - 2*radius)) + radius;
@@ -178,13 +173,12 @@ function getClicked(e){
     return undefined;
 }
 
-function nodeAdder(e){ 
+function edgeAdder(e){ 
     n = getClicked(e);
     if(n===undefined){
         return;
     }
     if(selected===undefined){
-        console.log('clicked a node');
         selected = n;
         c.fillStyle = nodeColorTarget;
         n.draw();
@@ -236,6 +230,7 @@ function colorClear(){
     });
 }
 
+//TODO
 function edgeRemover(e){
     n = getClicked(e);
     if(n===undefined){
@@ -256,12 +251,11 @@ function isComplete(){
 }
 
 function computeProperty(e){
-    var prop = e.currentTarget.innerText;
+    var prop = e.currentTarget.innerHTML.split("<span")[0];
     var spanner = e.currentTarget.children[0];
-    //console.log("prop: " + prop + " span: " + spanner.innerText);
     switch(prop){
         case "Completeness":
-            spanner.innerHTML = ": " + ((isComplete())? "YES":"NO");
+            spanner.innerHTML = ": " + ((isComplete())? yes:no);
             break;
         case "Nodes":
             spanner.innerHTML = ": " + nodes.length;
@@ -270,11 +264,11 @@ function computeProperty(e){
             spanner.innerHTML = ": " + edges.length;
             break;
         case "Eulerian Path":
-            spanner.innerText = ": " + ((eulerian())? "YES":"NO");
+        spanner.innerText = ": " + ((eulerian())? yes:no);
             break;
-        case "Hamiltonian Cycle":
+        /**case "Hamiltonian Path":
             hamiltonian();
-            break;
+            break; */
         case "Connected Components":
             spanner.innerText = ": " + connectedComponents();
             break;
@@ -282,18 +276,14 @@ function computeProperty(e){
             console.log('help! {' + prop + '}');
             break;
     }
-    // console.log(spanner);
 }
 
-//TODO: fix this
-/**traverse every edge strictly once, can revisit nodes */
 function eulerian(){
-    nodes.forEach(n => {
-        console.log(n.edges.length);
-    });
-
-    let oddDegrees = nodes.filter(n => (n.edges.length%2)==1).length;
-    if(oddDegrees == 2 || oddDegrees == 0){
+    if(connectedComponents()!==1){
+        return false;
+    }
+    let oddDegrees = nodes.filter(n => (n.neighbours.length%2)===1).length;
+    if(oddDegrees === 2 || oddDegrees === 0){
         return true;
     }
     else{
@@ -301,12 +291,11 @@ function eulerian(){
     }
 }
 
-/**traverse every node once */
+/**TODO: traverse every node once */
 function hamiltonian(){
     console.log('hamiltonian');
     return false;
 }
-
 
 let visited = [];
 function connectedComponents(){
@@ -332,6 +321,30 @@ function dfs(vertex, index){
             dfs(nodes[element], element);
         }
     }
+}
+
+function addInfo(property){
+    let spanner = property.children[1];
+    switch(property.innerText){
+        case "Nodes":
+            spanner.innerText = "Nodes, also referred to as vertices, think of these as the units in your graph.";
+            break;
+        case "Edges":
+            spanner.innerText = "Edges connect two nodes in a graph. These can be ordered, such that the edge goes from some node 1 to node 2, or unordered (like in this graph), where the order does not matter. Two nodes connected by an edge are said to be adjacent, or neighbours.";
+            break;
+        case "Completeness":
+            spanner.innerText = "In a complete graph, every node is connected (ie. shares an edge with) every other node in the graph. Fun fact: if a graph with N edges is complete, it will have N*(N-1)/2 edges!";
+            break;
+        case "Eulerian Path":
+            spanner.innerText = "A Eularian path in a graph is once that traverses every edge exactly once. You can think of this as whether it would be possible to draw the graph on paper without lifting your pencil.";
+            break;
+        case "Connected Components":
+            spanner.innerText = "A Connected Component is a subgraph of a graph in which each node is \"reachable\". This means there is a path to each node within the subgraph. That being said, a single node with no adjacent nodes is a component itself.";
+            break;
+        default:
+            console.log('Problem: ' + property.innerText);
+    }
+    spanner.style.display = "none";
 }
 
 c.fillStyle = nodeColor;
